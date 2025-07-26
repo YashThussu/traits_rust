@@ -2,15 +2,16 @@ use std::collections::HashMap;
 
 
 trait Accommodation {
-    
-    // fn get_description(&self)->String; 
 
-    // default implementation
+    fn book(&mut self,name:&str,nights:u32);
+}
+
+trait Description {
+
+    //default implementation
     fn get_description(&self)->String{
         String::from("A wonderful place to stay")
     }
-
-    fn book(&mut self,name:&str,nights:u32);
 }
 
 #[derive(Debug)]
@@ -36,16 +37,14 @@ impl Hotel{
 
 impl Accommodation for Hotel{
 
-    // fn get_description(&self)->String {
-        
-    //     format!("{} is the pinnacle of luxury",self.name)
-    // }
-
     fn book(&mut self,name:&str,nights:u32) {
         
         self.reservation.insert(name.to_string(), nights);
     }
 }
+
+// this takes the default implementation from the trait
+impl Description for Hotel{}
 
 
 #[derive(Debug)]
@@ -66,10 +65,6 @@ impl Airbnb{
 }
 
 impl Accommodation for Airbnb{
-    
-    fn get_description(&self)->String {
-        format!("Please enjoy {}'s Apartment",self.host)    
-    }
 
     fn book(&mut self,name:&str,nights:u32) {
         
@@ -77,6 +72,17 @@ impl Accommodation for Airbnb{
     }
     
 }
+
+impl Description for Airbnb {
+
+    // types own implementation of the trait
+    // this will override the default implementation
+
+    fn get_description(&self) -> String {
+        format!("A cozy Airbnb hosted by {}", self.host)
+    }
+}
+
 
 fn book_for_one_night<T: Accommodation>(entity: &mut T, guestname: &str) {
     
@@ -91,9 +97,20 @@ fn book_for_one_night<T: Accommodation>(entity: &mut T, guestname: &str) {
 
 // the below and above function are equivalent
 
-fn mix_and_match(entity1: &mut impl Accommodation, entity2: &mut impl Accommodation) {
+fn mix_and_match(entity1: &mut (impl Accommodation + Description), entity2: &mut impl Accommodation) {
     
     entity1.book("Alice", 2);
+    println!("{}",entity1.get_description());
+
+    entity2.book("Bob", 3);
+    
+}
+
+fn mix_and_match2<T:Accommodation+Description,U:Accommodation>(entity1: &mut T, entity2: &mut U){
+    
+    entity1.book("Alice", 2);
+    println!("{}",entity1.get_description());
+
     entity2.book("Bob", 3);
 }
 
@@ -105,4 +122,7 @@ fn main() {
     let mut airbnb=Airbnb::new("Peter");
     book_for_one_night( &mut airbnb,"amanda");
     println!("Airbnb: {:?}", airbnb);
+
+    mix_and_match(&mut hotel, &mut airbnb);
+    mix_and_match2(&mut hotel, &mut airbnb);
 }
