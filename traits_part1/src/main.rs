@@ -106,7 +106,9 @@ fn mix_and_match(entity1: &mut (impl Accommodation + Description), entity2: &mut
     
 }
 
-fn mix_and_match2<T:Accommodation+Description,U:Accommodation>(entity1: &mut T, entity2: &mut U){
+fn mix_and_match2<T,U>(entity1: &mut T, entity2: &mut U)
+where T: Accommodation+Description,
+      U: Accommodation {
     
     entity1.book("Alice", 2);
     println!("{}",entity1.get_description());
