@@ -78,9 +78,23 @@ impl Accommodation for Airbnb{
     
 }
 
-fn book_for_one_night(entity: &mut impl Accommodation, guestname: &str) {
+fn book_for_one_night<T: Accommodation>(entity: &mut T, guestname: &str) {
     
     entity.book(guestname,1);
+}
+
+// fn mix_and_match<T: Accommodation, U: Accommodation>(entity1: &mut T, entity2: &mut U) {
+    
+//     entity1.book("Alice", 2);
+//     entity2.book("Bob", 3);
+// }
+
+// the below and above function are equivalent
+
+fn mix_and_match(entity1: &mut impl Accommodation, entity2: &mut impl Accommodation) {
+    
+    entity1.book("Alice", 2);
+    entity2.book("Bob", 3);
 }
 
 fn main() {
