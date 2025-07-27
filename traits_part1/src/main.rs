@@ -116,9 +116,15 @@ where T: Accommodation+Description,
     entity2.book("Bob", 3);
 }
 
+fn choose_best_place_to_stay()->impl Accommodation + Description + std::fmt::Debug {
+    
+
+   Hotel::new("The Luxe")
+}
+
 fn main() {
     
-    let mut hotel=Hotel::new("The Lux");
+    let mut hotel=choose_best_place_to_stay();
     book_for_one_night( &mut hotel,"piers");
     println!("Hotel: {:?}", hotel);
     let mut airbnb=Airbnb::new("Peter");
