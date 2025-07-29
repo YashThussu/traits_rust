@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fmt::Display;
 
 
 trait Accommodation {
@@ -15,27 +16,30 @@ trait Description {
 }
 
 #[derive(Debug)]
-struct Hotel{
-    name:String,
+struct Hotel<T>{
+    name:T,
     reservation:HashMap<String,u32>
 }
 
-impl Hotel{
-    
-    fn new(name:&str)->Self{
+impl<T> Hotel<T>{
+
+        fn new(name:T)->Self{
         Self{
-            name:name.to_string(),
+            name,
             reservation:HashMap::new()
         }
     }
+}
 
+impl<T:Display> Hotel<T>{
+    
     fn summarize(&self)->String{
 
         format!("{}:{}",self.name,self.get_description())
     }
 }
 
-impl Accommodation for Hotel{
+impl <T> Accommodation for Hotel<T>{
 
     fn book(&mut self,name:&str,nights:u32) {
         
@@ -44,7 +48,7 @@ impl Accommodation for Hotel{
 }
 
 // this takes the default implementation from the trait
-impl Description for Hotel{}
+impl<T> Description for Hotel<T>{}
 
 
 #[derive(Debug)]
@@ -124,13 +128,12 @@ fn choose_best_place_to_stay()->impl Accommodation + Description + std::fmt::Deb
 
 fn main() {
     
-    let mut hotel=choose_best_place_to_stay();
-    book_for_one_night( &mut hotel,"piers");
-    println!("Hotel: {:?}", hotel);
-    let mut airbnb=Airbnb::new("Peter");
-    book_for_one_night( &mut airbnb,"amanda");
-    println!("Airbnb: {:?}", airbnb);
+    let hotel1=Hotel::new(String::from("The Luxe"));
+    println!("{}", hotel1.summarize());
 
-    mix_and_match(&mut hotel, &mut airbnb);
-    mix_and_match2(&mut hotel, &mut airbnb);
+    let hotel2=Hotel::new("The Grand Palace");
+    println!("{}",hotel2.summarize());
+
+    let hotel3=Hotel::new(vec!["The Cozy Inn", "The Grand Hotel"]);
+    println!("{}", hotel3.summarize());
 }
