@@ -128,12 +128,19 @@ fn choose_best_place_to_stay()->impl Accommodation + Description + std::fmt::Deb
 
 fn main() {
     
-    let hotel1=Hotel::new(String::from("The Luxe"));
-    println!("{}", hotel1.summarize());
+    let mut hotel=Hotel::new("The Luxe");
+    let mut Airbnb=Airbnb::new("John");
 
-    let hotel2=Hotel::new("The Grand Palace");
-    println!("{}",hotel2.summarize());
+    let stays:Vec<&dyn Description>=vec![&hotel, &Airbnb];
+    println!("{}",stays[0].get_description());
+    println!("{}",stays[1].get_description());
 
-    let hotel3=Hotel::new(vec!["The Cozy Inn", "The Grand Hotel"]);
-    println!("{}", hotel3.summarize());
+    let mut stays2: Vec<&mut dyn Accommodation> = vec![&mut hotel, &mut Airbnb];
+    stays2[0].book("Alice", 2);
+    stays2[1].book("Bob", 3);
+
+    println!("{:#?}",hotel);
+    println!("{:#?}",Airbnb);
+
+
 }
