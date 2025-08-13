@@ -2,7 +2,13 @@ trait Taxable {
 
     const TAX_RATE: f64 = 0.25;
 
-    fn amount(&self)->f64;
+    fn set_amount(&mut self, new_amount:f64); // setter method
+
+    fn double_amount(&mut self){
+        self.set_amount(self.amount() * 2.0);
+    } // 
+
+    fn amount(&self)->f64; // setter method
 
     fn tax_bill(&self)->f64{
         self.amount()*Self::TAX_RATE
@@ -20,6 +26,10 @@ impl Taxable for Income{
     fn amount(&self)->f64{
         self.amount
     }
+
+    fn set_amount(&mut self, new_amount:f64) {
+        self.amount = new_amount;
+    }
 }
 
 #[derive(Debug)]
@@ -31,6 +41,10 @@ impl Taxable for Bonus{
 
     const TAX_RATE:f64=0.30;
 
+    fn set_amount(&mut self, new_amount:f64) {
+        self.value = new_amount;
+    }
+    
     fn amount(&self)->f64{
         self.value
     }
@@ -38,11 +52,15 @@ impl Taxable for Bonus{
 
 fn main() {
     
-    let income=Income{amount: 1000.0};
+    let mut income=Income{amount: 1000.0};
     println!("Total tax owned: {:.2}", income.tax_bill());
     println!("Tax rate for income: {:.2}", Income::TAX_RATE);
+    income.double_amount();
+    println!("New amount after doubling: {:.2}", income.amount());
 
-    let bonus=Bonus{value: 150000.0};
+    let mut bonus=Bonus{value: 150000.0};
     println!("Total tax owned: {:.2}", bonus.tax_bill());
     println!("Tax rate for bonus: {:.2}", Bonus::TAX_RATE);
+    bonus.double_amount();
+    println!("New amount after doubling: {:.2}", bonus.amount());
 }
