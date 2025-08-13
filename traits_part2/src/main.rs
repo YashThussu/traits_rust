@@ -24,7 +24,7 @@ impl Taxable for Income{
 
 #[derive(Debug)]
 struct Bonus{
-    amount: f64,
+    value: f64,
 }
 
 impl Taxable for Bonus{
@@ -32,7 +32,7 @@ impl Taxable for Bonus{
     const TAX_RATE:f64=0.30;
 
     fn amount(&self)->f64{
-        self.amount
+        self.value
     }
 }
 
@@ -42,7 +42,7 @@ fn main() {
     println!("Total tax owned: {:.2}", income.tax_bill());
     println!("Tax rate for income: {:.2}", Income::TAX_RATE);
 
-    let bonus=Bonus{amount: 150000.0};
+    let bonus=Bonus{value: 150000.0};
     println!("Total tax owned: {:.2}", bonus.tax_bill());
     println!("Tax rate for bonus: {:.2}", Bonus::TAX_RATE);
 }
