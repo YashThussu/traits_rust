@@ -1,4 +1,4 @@
-use std::fmt::{Display,Formatter,Result};
+use std::fmt::{Debug,Display,Formatter,Result};
 
 enum AppleType {
     GrannySmith,
@@ -17,6 +17,17 @@ impl Display for AppleType {
     }
 }
 
+impl Debug for AppleType {
+
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(f,"{}", match self {
+            AppleType::GrannySmith=>"AppleType::Granny Smith",
+            AppleType::Fuji=>"AppleType::Fuji",
+            AppleType::Honeycrisp=>"AppleType::Honeycrisp"
+        })
+    }
+}
+
 struct Apple {
     kind:AppleType,
     price:f64
@@ -27,6 +38,14 @@ impl Display for Apple {
         write!(f,"{} apple costs ${:.2}", self.kind, self.price)
     }
 }
+
+impl Debug for Apple {
+
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(f,"{:?}=> [{}]",self.kind,self.price)
+    }
+} 
+    
 
 fn main() {
 
@@ -40,6 +59,6 @@ fn main() {
         price: 1.25
     };
 
-    println!("{}",lunch_snack);
-    println!("{}",dinner);
+    println!("{:?}",lunch_snack);
+    println!("{:?}",dinner);
 }
